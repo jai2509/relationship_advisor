@@ -1,0 +1,12 @@
+streamlit
+openai
+requests
+python-dotenv
+faiss-cpu
+scikit-learn
+PyPDF2
+reportlab
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
