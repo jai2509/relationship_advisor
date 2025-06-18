@@ -1,4 +1,4 @@
-# app.py - Part 1/2
+# app.py - Full Version
 import streamlit as st
 import openai
 import requests
@@ -41,7 +41,8 @@ st.sidebar.title("🌗 App Navigation")
 tab = st.sidebar.radio("Choose Feature", [
     "Relationship Advisor", "Legal Help", "Therapy Chat", "Mood Tracker", 
     "Task Recommender", "Calendar Scheduler", "FAISS Search", "PDF Export", 
-    "Compatibility Test", "Daily Check-in", "Analytics", "Meditation", "Date Ideas"
+    "Compatibility Test", "Daily Check-in", "Analytics", "Meditation", "Date Ideas",
+    "CBT Thought Tracker", "EFT Tapping", "Behavior Activation", "Positive Reinforcement"
 ])
 
 def query_groq(prompt, role="Expert AI"):
@@ -54,7 +55,8 @@ def query_groq(prompt, role="Expert AI"):
     }
     res = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
     return res.json()["choices"][0]["message"]["content"]
-# app.py - Part 2/2
+
+# ------------------------ Tabs ------------------------
 
 if tab == "Relationship Advisor":
     st.header("💬 Relationship Advice")
@@ -167,3 +169,41 @@ elif tab == "Date Ideas":
     if st.button("Generate Date Night Ideas"):
         date_ideas = query_groq(f"Suggest 3 {vibe} date night ideas for a couple in {season}", role="Romantic Planner")
         st.success(date_ideas)
+
+# ✅ New Psychological Tools
+elif tab == "CBT Thought Tracker":
+    st.header("🧠 CBT Thought Record")
+    st.write("Use this to understand and reframe negative thoughts.")
+    situation = st.text_area("1️⃣ Describe the situation:")
+    thoughts = st.text_area("2️⃣ What automatic thoughts came to mind?")
+    emotions = st.text_area("3️⃣ What emotions did you feel?")
+    distortions = st.multiselect("4️⃣ Any cognitive distortions?", 
+        ["All-or-Nothing Thinking", "Overgeneralization", "Catastrophizing", "Mind Reading", "Should Statements"])
+    balanced_thought = st.text_area("5️⃣ Write a more balanced alternative thought:")
+    if st.button("🧠 Save Thought Record"):
+        st.success("✅ Thought recorded and reframed!")
+
+elif tab == "EFT Tapping":
+    st.header("👐 EFT (Tapping) for Emotional Relief")
+    emotion = st.text_input("What emotion do you want to release (e.g. anxiety, guilt, stress)?")
+    if st.button("🎯 Generate Tapping Script"):
+        tapping_script = query_groq(
+            f"Generate an EFT tapping script for someone feeling {emotion}. Include setup statement and tapping rounds.",
+            role="Certified EFT Practitioner")
+        st.info(tapping_script)
+
+elif tab == "Behavior Activation":
+    st.header("🧭 Behavior Activation Tasks for Mood Lifting")
+    mood_input = st.text_input("Enter your current mood (e.g. sad, unmotivated, lonely):")
+    if st.button("🎬 Suggest an Activation Task"):
+        task = query_groq(
+            f"Suggest 2 evidence-based behavior activation activities to help someone feeling '{mood_input}', ideally for couples.",
+            role="Behavioral Psychologist")
+        st.success(task)
+
+elif tab == "Positive Reinforcement":
+    st.header("🎁 Positive Reinforcement Tracker")
+    habit = st.text_input("Enter a healthy habit to build (e.g. 'compliment partner daily'):")
+    reward = st.text_input("Enter a reward (e.g. 'watch favorite show'):")
+    if st.button("🚀 Log Habit & Reward"):
+        st.success(f"Awesome! Doing '{habit}' earns you '{reward}'. Repeat for 7 days to form a habit!")
